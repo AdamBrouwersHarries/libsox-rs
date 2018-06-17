@@ -1,0 +1,8 @@
+[package]
+name = "rust-libsox"
+version = "0.1.0"
+authors = ["Adam Harries <harries.adam@gmail.com>"]
+build = "build.rs"
+
+[build-dependencies]
+bindgen = "0.37.0"
