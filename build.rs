@@ -1,4 +1,4 @@
-extern crate bindgen; 
+extern crate bindgen;
 
 use std::env;
 use std::path::PathBuf;
@@ -27,8 +27,15 @@ fn main() {
         .expect("Couldn't write bindings!");
 
     // Download some data for our tests.
-    let output = Command::new("sh").arg("-c").arg("mkdir -p data; wget https://freemusicarchive.org/music/download/3deb8f20d0eb5ce089d849141d3b8e07f7839cb3 -O data/test.mp3").output().expect("failed to execute process");
+    let testdata_url =
+        "https://freemusicarchive.org/music/download/3deb8f20d0eb5ce089d849141d3b8e07f7839cb3";
+    let testdata_file = "data/test.mp3";
+    let command = format!("mkdir -p data; wget {} -O {}", testdata_url, testdata_file);
+    let output = Command::new("sh")
+        .arg("-c")
+        .arg(command)
+        .output()
+        .expect("failed to execute process");
 
     assert!(output.status.success());
-
 }
