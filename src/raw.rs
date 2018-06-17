@@ -1,6 +1,5 @@
-
-// Wrap the "raw" ffi interface in a private library, so that implementers, 
-// but not users can access it. 
+// Wrap the "raw" ffi interface in a private library, so that implementers,
+// but not users can access it.
 
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
