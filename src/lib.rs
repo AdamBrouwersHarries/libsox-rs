@@ -86,3 +86,15 @@ pub fn read_file(filename: String) -> Result<Vec<i32>, SoxErrorT> {
     }
 }
 
+
+#[cfg(test)]
+mod tests {
+
+    // import all of our sox stuff
+    use super::*;
+
+    #[test]
+    fn read_file() {
+        assert!(true);
+    }
+}

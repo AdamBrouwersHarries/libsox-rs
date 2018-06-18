@@ -1,6 +1,7 @@
 extern crate bindgen;
 
 use std::env;
+use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
 
@@ -36,17 +37,22 @@ fn main() {
     let mut testdata_file = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     testdata_file.push("data/test.mp3");
 
-    let command = format!(
-        "mkdir -p {}; wget {} -O {}",
-        testdata_folder.to_str().unwrap(),
-        testdata_url,
-        testdata_file.to_str().unwrap()
-    );
-    let output = Command::new("sh")
-        .arg("-c")
-        .arg(command)
-        .output()
-        .expect("failed to execute process");
+    if !testdata_file.as_path().exists() {
+        let command = format!(
+            "mkdir -p {}; wget {} -O {}",
+            testdata_folder.to_str().unwrap(),
+            testdata_url,
+            testdata_file.to_str().unwrap()
+        );
 
-    assert!(output.status.success());
+        println!("Running command: {}", command);
+
+        let output = Command::new("sh")
+            .arg("-c")
+            .arg(command)
+            .output()
+            .expect("failed to execute process");
+
+        assert!(output.status.success());
+    }
 }
