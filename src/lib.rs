@@ -69,14 +69,14 @@ pub fn read_file(filename: String) -> Result<Vec<i32>, SoxErrorT> {
             // check that we're not done
             if read_result != (SoxErrorT::EndOfFile as usize) {
                 // reserve space in the vector, and copy values in
-               final_vec.reserve(read_result);
+               final_vec.reserve (read_result);
                // copy into it
                final_vec.extend((buffer as [i32; samples]).iter().cloned());
             }
         }
 
 
-        let close_result = sox_close(sox_format);
+        let _close_result = sox_close(sox_format);
 
         // if close_result as SoxErrorT != SoxErrorT::Success{
         //     return Err(close_result as SoxErrorT);
@@ -86,132 +86,3 @@ pub fn read_file(filename: String) -> Result<Vec<i32>, SoxErrorT> {
     }
 }
 
-#[cfg(test)]
-mod tests {
-
-    // import all of our sox stuff
-    use super::*;
-
-    #[test]
-    fn init_and_close() {
-        unsafe {
-            let sox_format_init_result = sox_format_init();
-
-            assert_eq!(sox_format_init_result, SoxErrorT::Success as i32);
-
-            let sox_init_result = sox_init();
-
-            assert_eq!(sox_init_result, SoxErrorT::Success as i32);
-
-            let sox_quit_result = sox_quit();
-
-            assert_eq!(sox_quit_result, SoxErrorT::Success as i32);
-        }
-    }
-
-    #[test]
-    fn open_file_for_reading() {
-        unsafe {
-            // init_sox();
-
-            let path = CString::new("data/test.mp3").unwrap();
-
-            let open_read_result = sox_open_read(path.as_ptr(), null(), null(), null());
-
-            println!("Open read result: {:?}", open_read_result);
-
-            let filetype = CStr::from_ptr((*open_read_result).filetype)
-                .to_str()
-                .unwrap();
-
-            println!("Filetype: {}", filetype);
-
-            assert_eq!(filetype, "mp3");
-
-            let close_result = sox_close(open_read_result);
-
-            assert_eq!(close_result, SoxErrorT::Success as i32);
-
-            // sox_quit();
-        }
-    }
-
-    #[test]
-    // #[ignore]
-    fn read_from_file() {
-        unsafe {
-            // init_sox();
-
-            let path = CString::new("data/test.mp3").unwrap();
-
-            let open_read_result = sox_open_read(path.as_ptr(), null(), null(), null());
-
-            println!("Open read result: {:?}", open_read_result);
-
-            let filetype = CStr::from_ptr((*open_read_result).filetype)
-                .to_str()
-                .unwrap();
-
-            println!("Filetype: {}", filetype);
-
-            assert_eq!(filetype, "mp3");
-
-            let mut buffer: [std::os::raw::c_int; 64] = [0; 64];
-
-            let read_result = sox_read(open_read_result, buffer.as_mut_ptr(), 64);
-
-            println!("Read {} samples", read_result);
-
-            assert_eq!(read_result, 64);
-
-            let close_result = sox_close(open_read_result);
-
-            assert_eq!(close_result, SoxErrorT::Success as i32);
-
-            // sox_quit();
-        }
-    }
-
-    #[test]
-    // #[ignore]
-    fn read_till_eof() {
-        unsafe {
-            let path = CString::new("data/test.mp3").unwrap();
-
-            let open_read_result = sox_open_read(path.as_ptr(), null(), null(), null());
-
-            println!("Open read result: {:?}", open_read_result);
-            println!("Open read result: {:#?}", open_read_result);
-
-            let filetype = CStr::from_ptr((*open_read_result).filetype)
-                .to_str()
-                .unwrap();
-
-            println!("Filetype: {}", filetype);
-
-            assert_eq!(filetype, "mp3");
-
-            const samples: usize = 8192;
-
-            let mut buffer: [std::os::raw::c_int; samples] = [0; samples];
-
-            let mut read_result = samples;
-
-            let mut sample_count = 0;
-            while read_result == samples {
-                read_result = sox_read(open_read_result, buffer.as_mut_ptr(), samples);
-                sample_count += 1;
-                println!("Read {} samples.", read_result);
-            }
-
-            println!("Final read result: {}", read_result);
-            println!("Read {} individual blocks of samples. ", sample_count);
-
-            // assert_eq!(read_result, 64);
-
-            let close_result = sox_close(open_read_result);
-
-            assert_eq!(close_result, SoxErrorT::Success as i32);
-        }
-    }
-}

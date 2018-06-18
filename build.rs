@@ -28,9 +28,20 @@ fn main() {
 
     // Download some data for our tests.
     let testdata_url =
-        "https://freemusicarchive.org/music/download/3deb8f20d0eb5ce089d849141d3b8e07f7839cb3";
-    let testdata_file = "data/test.mp3";
-    let command = format!("mkdir -p data; wget {} -O {}", testdata_url, testdata_file);
+        "https://archive.org/download/78_little-brown-jug_glenn-miller-and-his-orchestra-glenn-miller_gbia0015205a/Little%20Brown%20Jug%20-%20Glenn%20Miller%20and%20his%20Orchestra.mp3";
+
+    let mut testdata_folder = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    testdata_folder.push("data");
+
+    let mut testdata_file = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    testdata_file.push("data/test.mp3");
+
+    let command = format!(
+        "mkdir -p {}; wget {} -O {}",
+        testdata_folder.to_str().unwrap(),
+        testdata_url,
+        testdata_file.to_str().unwrap()
+    );
     let output = Command::new("sh")
         .arg("-c")
         .arg(command)
