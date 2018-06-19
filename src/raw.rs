@@ -7,17 +7,16 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
-
 #[cfg(test)]
 mod tests {
 
     // import all of our sox stuff
-    use super::*;
     use super::super::*;
+    use super::*;
     use std::ffi::{CStr, CString};
     use std::ptr::null;
 
-            use std::path::PathBuf;
+    use std::path::PathBuf;
 
     #[test]
     fn init_and_close() {
@@ -41,8 +40,8 @@ mod tests {
         unsafe {
             // init_sox();
 
-    let mut d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    d.push("data/test.mp3");
+            let mut d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+            d.push("data/test.mp3");
 
             let path = CString::new(d.to_str().unwrap()).unwrap();
 
@@ -70,8 +69,8 @@ mod tests {
     fn read_from_file() {
         unsafe {
             // init_sox();
-             let mut d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    d.push("data/test.mp3");
+            let mut d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+            d.push("data/test.mp3");
 
             let path = CString::new(d.to_str().unwrap()).unwrap();
 
@@ -106,8 +105,8 @@ mod tests {
     #[test]
     fn read_till_eof() {
         unsafe {
-             let mut d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    d.push("data/test.mp3");
+            let mut d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+            d.push("data/test.mp3");
             let path = CString::new(d.to_str().unwrap()).unwrap();
 
             let open_read_result = sox_open_read(path.as_ptr(), null(), null(), null());
@@ -138,6 +137,12 @@ mod tests {
 
             println!("Final read result: {}", read_result);
             println!("Read {} individual blocks of samples. ", sample_count);
+
+            print!("Final 16 samples: [");
+            for b in &buffer[..16] {
+                print!("{},", b);
+            }
+            println!("]");
 
             // assert_eq!(read_result, 64);
 
