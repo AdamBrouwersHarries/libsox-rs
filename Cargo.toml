@@ -1,5 +1,5 @@
 [package]
-name = "rust-libsox"
+name = "libsox-rs"
 version = "0.1.0"
 authors = ["Adam Harries <harries.adam@gmail.com>"]
 build = "build.rs"
